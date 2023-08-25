@@ -1,0 +1,33 @@
+import React, { useState, useEffect } from 'react';
+import Typography from '@mui/material/Typography';
+
+const TimeOfDay = () => {
+	const [formattedTime, setFormattedTime] = useState('');
+
+	useEffect(() => {
+		// Function to get the current formatted time
+		const getFormattedTime = () => {
+			const currentTime = new Date();
+			const hour = currentTime.getHours();
+			const minute = currentTime.getMinutes();
+			const amPm = hour >= 12 ? 'PM' : 'AM';
+
+			const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
+
+			const formattedMinute = minute < 10 ? `0${minute}` : minute;
+
+			return `${formattedHour}:${formattedMinute} ${amPm}`;
+		};
+
+		setFormattedTime(getFormattedTime());
+
+		const interval = setInterval(() => {
+			setFormattedTime(getFormattedTime());
+		}, 60000);
+
+		return () => clearInterval(interval);
+	}, []);
+	return <Typography>{formattedTime}</Typography>;
+};
+
+export default TimeOfDay;
